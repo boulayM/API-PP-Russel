@@ -13,7 +13,7 @@ var express = require('express');
 var router = express.Router();
 
 const service = require ('../services/users');
-const private = require ('../middlewares/private')
+const private = require ('../middlewares/private');
 
 
 router.get ('/', service.getAll, private.checkJWT);

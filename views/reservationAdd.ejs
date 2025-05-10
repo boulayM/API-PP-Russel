@@ -1,0 +1,15 @@
+<%- include('partials/header', { title: 'Reservations' }) %>
+
+<div class="card ms-4 mt-4" style="width: 24rem;">
+    <div class="card-body">
+      <h5>Réservation créee avec succés!</h5>
+      <h6 class="card-title">Reservation Id: <%= reservation._id %></h6>
+      <p class="card-text">Numéro du catway: <%= reservation.catwayNumber %></p>
+      <p class="card-text">Nom du client: <%= reservation.clientName %></p>
+      <p class="card-text">Nom du bateau: <%= reservation.boatName %></p>
+      <p class="card-text">Date d'entrée: <%= reservation.startDate %></p>
+      <p class="card-text">Date de sortie: <%= reservation.endDate %></p><br><br>
+      <a href="/reservationsPage">Retour à la page des réservations</a><br>
+      <a href="/home">Retour à la page d'accueil</a>
+    </div>
+</div>

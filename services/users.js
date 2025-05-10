@@ -36,7 +36,7 @@ exports.getById = async (req, res, next) => {
     const id = req.params.id
 
     try {
-        let user = await User.findOne(id);
+        let user = await User.findById(id);
 
         if (user) {
             return res.status(200).json(user);

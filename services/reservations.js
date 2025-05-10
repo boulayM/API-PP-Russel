@@ -1,5 +1,7 @@
 const Reservation = require ('../models/reservation');
 
+
+
 //ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER TOUTES LES RESERVATIONS
 
 
@@ -7,6 +9,10 @@ exports.getAll = async (req, res, next) => {
 
     try {
         let reservations = await Reservation.find();
+        reservations.sort((a, b)=> {
+            return a.catwayNumber - b.catwayNumber
+        });
+
 
         if (reservations) {
 
@@ -24,14 +30,16 @@ exports.getAll = async (req, res, next) => {
 //ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER UNE RESERVATION AVEC SON ID
 
 exports.getById = async (req, res, next) => {
-    const id = req.params.id
+
+    const id = req.body.catwayNumber
 
     try {
 
-        let reservation = await Reservation.findById(id);
+        let reservation = await Reservation.findOne({ catwayNumber: id });
+
 
         if (reservation) {
-            return res.status(200).json(reservation);
+            return res.render('oneReservation', {reservation});
         }
 
         return res.status(404).json('reservation_not_found');
@@ -57,7 +65,7 @@ exports.add = async (req, res, next) => {
 
     try {
         let reservation = await Reservation.create(temp);
-        return res.status(201).json(reservation);
+        return res.render('reservationAdd', {reservation});
     }
     catch (error) {
 
@@ -69,18 +77,18 @@ exports.add = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
 
-    const id = req.params.id
+    const id = req.body.catwayNumber;
 
     const temp = ({
-        number: req.body.catwayNumber,
-        name: req.body.clientName,
-        boat: req.body.boatName,
-        start: req.body.startDate,
-        end: req.body.endDate
+        catwayNumber: req.body.catwayNumber,
+        clientName: req.body.clientName,
+        boatName: req.body.boatName,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
     });
 
     try {
-        let reservation = await Reservation.findOne({_id : id});
+        let reservation = await Reservation.findOne({ catwayNumber: id});
         if (reservation) {
             Object.keys(temp).forEach((key) => {
                 if (!!temp[key]) {
@@ -106,7 +114,7 @@ exports.delete = async (req, res, next) => {
     try {
         await Reservation.deleteOne ({_id: id});
 
-        return res.status(204).json("delete_ok");
+        return res.render('reservationDelete');
     }
     catch (error) {
         return res.status(501).json(error);
