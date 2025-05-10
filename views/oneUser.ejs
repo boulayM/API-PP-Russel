@@ -1,0 +1,61 @@
+<%- include('partials/header', { title: 'Catways' }) %>
+
+<div class="card mt-4 ms-4 text-center" style="width: 18rem;">
+    <div class="card-body">
+      <h6 class="card-title">Id: <%= user._id %></h6>
+      <p class="card-text">Nom: <%= user.name %></p>
+      <p class="card-text">Prénom: <%= user.firstname %></p>
+      <p class="card-text">Email: <%= user.email %></p>
+<div class="accordion">
+    <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+              Modifier l'utilisateur
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="mb-3">
+                    <fieldset class="ml-3 mt-3">
+                        <form action="/users/<%= user.email %>?_method=PATCH" method="POST">
+                            <label for="name" class="form-label">Nom de l'utilisateur</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="<%= user.name %>"><br>
+                            <label for="firstName">Prénom de l'utilisateur</label>
+                            <input type="text" id="firstname" name="firstname" class="form-control" placeholder="<%= user.firstname %>"><br>
+                            <label for="email">Email de l'utilisateur</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="<%= user.email %>"><br>
+                            <label for="password">Mot de passe</label><br>
+                            <input type="text" name="password" class="form-control"><br>
+                            <button type="submit">MODIFIER</button>
+                            <button type="reset">EFFACER</button>
+                        </form>
+                    </fieldset>            
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+              Supprimer l'utilisateur
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="mb-3">
+                    <fieldset class="ml-3 mt-3">
+                        <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+                            <input type="text" id="_id" name="_id" value="<%= user._id %>" hidden><br>
+                            <button type="submit">SUPPRIMER</button>
+                        </form>
+                    </fieldset>            
+                </div>
+            </div>
+          </div>
+        </div>
+</div>
+</div>
+      <a href="/users" class="card-link">Retour à la page des utilisateurs</a>
+      <a href="/home" class="card-link">Retour à la page d'accueil</a><br>
+
+<%- include('partials/footer') %>
