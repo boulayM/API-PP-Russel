@@ -3,116 +3,55 @@
     <h1>Bienvenue dans l'API du Port de Plaisance Russel</h1>
 </div>
 <%- include('partials/catwaysNavbar') %> 
-<div class="container">
-<div class="accordion">
-    <div class="accordion-item" id="catways">
-      <h2 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Liste des Catways
-        </button>
-      </h2>
-      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-            <div class="mt-4">
-                <% data.forEach(catway => { %>
-                  <form action="/catways/<%= catway._id%>?_method=PATCH" method="POST" >
-                    <p>Catway number: <%= catway.catwayNumber %></p>
-                    <p>Catway type: <%= catway.catwayType %></p>
-                    <p>Catway State: <%= catway.catwayState %></p>
-                    <label for="catwayState">Modifier l'état du Catway</label><br>
-                    <input type="text" name="catwayState" id="catwayState">
-                    <button type="submit">MODIFIER</button>
-                  </form>
-                    <hr class="border border-primary border-2 opacity-50">
-                <% }) %>
-            </div>      
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Ajouter un Catway
-        </button>
-      </h2>
-      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-            <div class="mb-3">
-                <fieldset class="ml-3 mt-3">
-                    <legend>Formulaire pour AJOUTER un Catway</legend>
-                    <form action="/catways/add?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
-                        <label for="catwayNumber">Tapez ne numéro du nouveau Catway</label><br>
-                        <input type="number" id="catwayNumber" name="catwayNumber" required><br><br>
-                        <label for="catwayType">Choisissez le type du nouveau Catway</label><br>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="catwayType" id="short" value="Short" checked>
-                            <label class="form-check-label" for="radioDefault1">
-                              Short
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="catwayType" id="long" value="Long">
-                            <label class="form-check-label" for="radioDefault2">
-                              Long
-                            </label>
-                        </div><br><br>                        
-                        <label for="catwayState">Décrivez l'état du nouveau Catway</label><br>
-                        <textarea name="catwayState" id="catwayState" required></textarea><br>
-                        <button type="submit">INCLURE</button>
-                        <button type="reset">EFFACER</button>
-                    </form>
-                </fieldset>            
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-          Modifier un Catway
-        </button>
-      </h2>
-      <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-            <div class="mb-3">
-                <fieldset class="ml-3 mt-3">
-                    <legend>Formulaire pour MODIFIER un Catway</legend>
-                    <form action="/catways/:id?_method=PATCH" method="POST">
-                        <label for="id" class="form-label">Tapez l'Id du Catway</label>
-                        <input type="text" id="_id" name="_id" class="form-control" required><br>
-                        <label for="catwayState">Décrivez l'état du nouveau Catway</label><br>
-                        <textarea name="catwayState" id="catwayState" required></textarea><br>
-                        <button type="submit">MODIFIER</button>
-                        <button type="reset">EFFACER</button>
-                    </form>
-                </fieldset>            
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-          Supprimer un Catway
-        </button>
-      </h2>
-      <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-            <div class="mb-3">
-                <fieldset class="ml-3 mt-3">
-                    <legend>Formulaire pour SUPPRIMER un Catway</legend>
-                    <form action="/catways/:id?_method=DELETE" method="POST">
-                        <label for="id" class="form-label">Tapez l'Id du Catway</label>
-                        <input type="text" id="_id" name="_id" class="form-control" required><br>
-                        <button type="submit">SUPPRIMER</button>
-                        <button type="reset">EFFACER</button>
-                    </form>
-                </fieldset>            
-            </div>
-        </div>
-      </div>
-    </div>
+<div class="m-4">
+    <% data.forEach(catway => { %>
+
+  <div class="text-center text-white fs-5 bg-secondary p-2">
+        <p> Id: <%= catway._id %></p>
+        <p>Numéro du Catway: <%= catway.catwayNumber %></p>
+        <p>Type de Catway: <%= catway.catwayType %></p>
+        <p>Etat du Catway: <%= catway.catwayState %></p>
   </div>
+
+<hr class="border border-primary border-1 opacity-50">
+
+  <h5>Réserver le Catway</h5>
+    <form action="/reservations/add?_method=PUT" method="POST">
+        <input type="number" id="catwayNumber" name="catwayNumber" class="form-control" value="<%= catway.catwayNumber %>" hidden><br>
+      <label for="clientName">Tapez le prénom et le nom du client</label><br>
+        <input type="text" id="clientName" name="clientName" required><br>
+      <label for="boateName">Tapez le nom du bateau</label><br>
+        <input type="text" id="boatName" name="boatName" required><br>
+      <label for="startDate">Tapez la date d'arrivée</label><br>
+        <input type="datetime-local" id="startDate" name="startDate" required><br>
+      <label for="endtDate">Tapez la date de départ</label><br>
+        <input type="datetime-local" id="endDate" name="endDate" required><br><br>
+        <button type="submit">RESERVER</button>
+        <button type="reset">EFFACER</button>
+    </form><br>
+
+<hr class="border border-primary border-1 opacity-50">
+
+      <legend><h5>Modifier l'état du Catway</h5></legend><br>
+      <form action="/catways/<%= catway._id%>?_method=PATCH" method="POST">
+          <textarea name="catwayState" id="catwayState" placeholder="Décrivez le nouvel état du Catway"></textarea><br>
+        <button type="submit">MODIFIER</button>
+      </form><br>
+
+<hr class="border border-primary border-1 opacity-50">
+
+      <form action="/catways/<%= catway._id%>?_method=DELETE" method="POST">
+      <label for="delete"><h5>Supprimer le Catway</h5></label><br>
+      <button type="submit" id="delete">SUPPRIMER</button>
+      </form>
+
+    <a href="/catwaysPage">Retour à la page des Catways</a><br>
+    <a href="/home">Retour à la page d'accueil</a><br>
+
+<hr class="border border-dark border-2 opacity-100">
+<hr class="border border-dark border-2 opacity-100">
+
+  <% }) %>
 </div>
 
 <%- include('partials/footer') %>

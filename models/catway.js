@@ -2,6 +2,7 @@ const mongoose = require ('mongoose');
 const Schema = mongoose.Schema;
 
 const Catway = new Schema ({
+    
     catwayNumber: {
         type: Number,
         trim: true,

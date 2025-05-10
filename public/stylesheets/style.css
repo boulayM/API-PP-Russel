@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#infos {
+  display: block;
+  background-color: cadetblue;
+}

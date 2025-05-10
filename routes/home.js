@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const service = require ('../services/home');
-const private = require ('../middlewares/private')
+const private = require ('../middlewares/private');
 
 
 router.get('/', service.get, private.checkJWT);

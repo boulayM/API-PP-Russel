@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Catways' }) %>
+<div class="container text-center">
+    <h1>Bienvenue dans l'API du Port de Plaisance Russel</h1>
+</div>
+<%- include('partials/catwaysPageNavbar') %> 
+                <fieldset class="ml-3 mt-3">
+                    <legend>Formulaire pour AJOUTER un Catway</legend>
+                    <form action="/catways/add?_method=PUT" method="POST">
+                        <label for="catwayNumber">Tapez ne numéro du nouveau Catway</label><br>
+                        <input type="number" id="catwayNumber" name="catwayNumber" required><br><br>
+                        <label for="catwayType">Choisissez le type du nouveau Catway</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="catwayType" id="short" value="Short" checked>
+                            <label class="form-check-label" for="radioDefault1">
+                              Short
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="catwayType" id="long" value="Long">
+                            <label class="form-check-label" for="radioDefault2">
+                              Long
+                            </label>
+                        </div><br><br>                        
+                        <label for="catwayState">Décrivez l'état du nouveau Catway</label><br>
+                        <textarea name="catwayState" id="catwayState" required></textarea><br>
+                        <button type="submit">INCLURE</button>
+                        <button type="reset">EFFACER</button>
+                    </form>
+                </fieldset>            
+
+<%- include('partials/footer') %>
+
+    

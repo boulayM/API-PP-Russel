@@ -1,17 +1,25 @@
+const { render } = require('jade');
 const Catway = require ('../models/catway');
 const Reservation = require('../models/reservation');
+const service = require ('../services/home');
 
 //ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER TOUS LES CATWAYS
 
 exports.getAll = async (req, res, next) => {
 
     try {
+
         let catways = await Catway.find();
+        catways.sort((a, b)=> {
+            return a.catwayNumber - b.catwayNumber
+        });
 
         if (catways) {
 
             return res.render('catways', {data: catways});
+
         }
+
 
         return res.status(404).json('catways_not_found');
 
@@ -25,15 +33,15 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
 
-    const id = req.params.catwayNumber;
+    const id = req.body.catwayNumber;
 
     try {
 
-        let catway = await Catway.findOne(id);
+        let oneCatway = await Catway.findOne({ catwayNumber: id });
 
-        if (catway) {
+        if (oneCatway) {
             
-            return res.status(200).json(catway);
+            return res.render('oneCatway', {oneCatway});
         }
 
         return res.status(404).json('catway_not_found');
@@ -74,11 +82,13 @@ exports.add = async (req, res, next) => {
     try {
         let catway = await Catway.create(temp);
         return res.status(201).json(catway);
+        
     }
     catch (error) {
 
         return res.status(501).json(error);
     }
+
 };
 
 //LE CALLBACK QUI SERVIRA A MODIFIER UN CATWAY
@@ -88,9 +98,8 @@ exports.update = async (req, res, next) => {
     const id = req.params.id
 
     const temp = ({
-        number: req.body.catwayNumber,
-        type: req.body.catwayType,
-        state: req.body.catwayState
+        
+        catwayState: req.body.catwayState
     });
 
     try {
@@ -102,10 +111,10 @@ exports.update = async (req, res, next) => {
                 }
             });
             await catway.save();
-            return res.status(201).json(catway);
+            return res.status(200).json(catway);
 
         }
-        return res.status(404).json("user_not_found");
+        return res.status(404).json("catway_not_found");
     }
     catch {
         return res.status(501).json(error);
@@ -121,6 +130,7 @@ exports.delete = async (req, res, next) => {
         await Catway.deleteOne ({_id: id});
 
         return res.status(204).json("delete_ok");
+    
     }
     catch (error) {
         return res.status(501).json(error);

@@ -3,7 +3,9 @@ var router = express.Router();
 
 const userRoute = require ('../routes/users');
 const catwaysRoute = require('../routes/catways');
+const catwaysPageRoute = require ('../routes/catwaysPage');
 const reservationsRoute = require('../routes/reservations');
+const reservationsPageRoute = require('../routes/reservationsPage');
 const homeRoute = require ('../routes/home');
 
 const service = require ('../services/index');
@@ -28,7 +30,9 @@ router.get('/', async (req, res) => {/*
 
 
 router.use('/reservations', reservationsRoute);
+router.use('/reservationsPage', reservationsPageRoute);
 router.use ('/catways', catwaysRoute);
+router.use('/catwaysPage', catwaysPageRoute);
 router.use ('/users', userRoute);
 router.use('/home', homeRoute);
 

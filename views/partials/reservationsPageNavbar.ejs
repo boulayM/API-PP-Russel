@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" href="#">MENU RESERVATIONS</a>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item ml-4 nav-link">
+          <a class="nav-link" href="/reservations">| Liste des Réservations |</a>
+        </li>
+        <li class="nav-item ml-4 nav-link">
+          <a class="nav-link">Recherche par numéro de Catway</a>
+        </li>
+      </ul>
+        <form class="d-flex justify-content-end" role="search" action="/reservations/:id" method="POST">
+        <input class="form-control me-2" type="number" placeholder="Numéro du Catway" name="catwayNumber" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">CHERCHER</button>
+      </form>
+      <ul class="navbar-nav">
+        <li class="nav-item ml-4">
+          <a class="nav-link" href="/home">| RETOUR À LA PAGE D'ACCUEIL |</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
