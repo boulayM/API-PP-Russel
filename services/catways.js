@@ -51,23 +51,6 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-//LE CALLBACK QUI SERVIRA A RECCUPERE LES RESERVATIONS D'UN CATWAY
-
-exports.getReservation = async (req, res, next) => {
-
-    const number = req.params.catwayNumber
-
-    try {
-        let reservation = await Reservation.find(number);
-        if (reservation) {
-        return res.status(200).json(reservation);
-    }
-    return res.status(404).json('catway_not_found');
-    } catch (error) {
-        return res.status(501).json(error);
-    }
-};
-
 //LE CALLBACK QUI SERVIRA A AJOUTER UN CATWAY
 
 exports.add = async (req, res, next) => {
@@ -81,7 +64,7 @@ exports.add = async (req, res, next) => {
 
     try {
         let catway = await Catway.create(temp);
-        return res.status(201).json(catway);
+        return res.render('catwaysAdd', {catway});
         
     }
     catch (error) {
@@ -111,7 +94,7 @@ exports.update = async (req, res, next) => {
                 }
             });
             await catway.save();
-            return res.status(200).json(catway);
+            return res.render('catwaysUpdate', {catway});
 
         }
         return res.status(404).json("catway_not_found");
@@ -129,7 +112,7 @@ exports.delete = async (req, res, next) => {
     try {
         await Catway.deleteOne ({_id: id});
 
-        return res.status(204).json("delete_ok");
+        return res.render('catwayDelete');
     
     }
     catch (error) {

@@ -96,7 +96,7 @@ exports.update = async (req, res, next) => {
                 }
             });
             await reservation.save();
-            return res.status(201).json(reservation);
+            return res.render('reservationsUpdate', {reservation});
 
         }
         return res.status(404).json("reservation_not_found");

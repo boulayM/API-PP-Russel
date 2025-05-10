@@ -1,124 +1,83 @@
 <%- include('partials/header', { title: 'Users' }) %>
+
     <div class="container text-center">
         <h1>Bienvenue dans l'API du Port de Plaisance Russel</h1>
     </div>
-    <%- include('partials/usersNavbar') %> 
-    <div class="accordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Liste des Utilisateurs
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="mt-4">
-                    <% data.forEach(user => { %>
-                        <p class="card-text">Id:<%= user._id %></p>
-                        <p class="card-text">Nom:<%= user.name %></p>
-                        <p class="card-text">Prenom:<%= user.firstname %></p>
-                        <p class="card-text">email:<%= user.email %></p>
-                        <hr class="border border-primary border-2 opacity-50">
-                    <% }) %>
-                </div>        
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Ajouter un Utilisateur
-            </button>
-          </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="mb-3">
-                    <fieldset class="ml-3 mt-3">
-                        <legend>Formulaire pour AJOUTER un utilisateur</legend>
-                        <form action="/users/add?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
-                            <label for="role">Choisissez le type d'utilisateur</label>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="role" id="user" value="user" checked>
-                              <label class="form-check-label" for="user">
-                                user
-                              </label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="role" id="admin" value="admin">
-                                  <label class="form-check-label" for="admin">
-                                    admin
-                                  </label>
-                              </div><br><br>                          
-                            <label for="name" class="form-label">Tapez le nom de l'utilisateur</label>
-                            <input type="text" id="name" name="name" class="form-control" required><br>
-                            <label for="firstName">Tapez le prénom de l'utilisateur</label>
-                            <input type="text" id="firstname" name="firstname" class="form-control" required><br>
-                            <label for="email">Tapez l'email de l'utilisateur</label>
-                            <input type="email" id="email" name="email" class="form-control" required><br>
-                            <label for="password">Tapez le mot de passe</label>
-                            <input type="text" id="password" name="password" class="form-control" required><br>
-                            <button type="submit">INCLURE</button>
-                            <button type="reset">EFFACER</button>
-                        </form>
-                    </fieldset>            
-                </div>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-              Modifier un Utilisateur
-            </button>
-          </h2>
-          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="mb-3">
-                    <fieldset class="ml-3 mt-3">
-                        <legend>Formulaire pour MODIFIER un utilisateur</legend>
-                        <form action="/users/:id?_method=PATCH" method="POST" enctype="application/x-www-form-urlencoded">
-                            <label for="id" class="form-label">Tapez l'Id de l'utilisateur</label>
-                            <input type="text" id="id" name="id" class="form-control" required><br>
-                            <label for="name" class="form-label">Tapez le nom de l'utilisateur</label>
-                            <input type="text" id="name" name="name" class="form-control" required><br>
-                            <label for="firstName">Tapez le prénom de l'utilisateur</label>
-                            <input type="text" id="firstname" name="firstname" class="form-control" required><br>
-                            <label for="email">Tapez l'email de l'utilisateur</label>
-                            <input type="email" id="email" name="email" class="form-control" required><br>
-                            <button type="submit">MODIFIER</button>
-                            <button type="reset">EFFACER</button>
-                        </form>
-                    </fieldset>            
-                </div>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-              Supprimer un Utilisateur
-            </button>
-          </h2>
-          <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="mb-3">
-                    <fieldset class="ml-3 mt-3">
-                        <legend>Formulaire pour SUPPRIMER un utilisateur</legend>
-                        <form action="/users/:id?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
-                            <label for="id" class="form-label">Tapez l'Id de l'utilisateur</label>
-                            <input type="text" id="_id" name="_id" class="form-control" required><br>
-                            <button type="submit">SUPPRIMER</button>
-                            <button type="reset">EFFACER</button>
-                        </form>
-                    </fieldset>            
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div>
-        
-</div>
 
+<%- include('partials/usersNavbar') %> 
+
+    <div class="m-4">
+      <fieldset class="ml-3 mt-3">
+        <legend>Formulaire pour AJOUTER un utilisateur</legend>
+          <form action="/users/add?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
+            <label for="role">Choisissez le type d'utilisateur</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" id="user" value="user" checked>
+                <label class="form-check-label" for="user">user</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" id="admin" value="admin">
+                <label class="form-check-label" for="admin">admin</label>
+              </div><br><br>                          
+                <label for="name" class="form-label">Tapez le nom de l'utilisateur</label>
+                  <input type="text" id="name" name="name" class="form-control" required><br>
+                <label for="firstName">Tapez le prénom de l'utilisateur</label>
+                  <input type="text" id="firstname" name="firstname" class="form-control" required><br>
+                <label for="email">Tapez l'email de l'utilisateur</label>
+                  <input type="email" id="email" name="email" class="form-control" required><br>
+                <label for="password">Tapez le mot de passe</label>
+                  <input type="text" id="password" name="password" class="form-control" required><br>
+                  <button type="submit">INCLURE</button>
+                  <button type="reset">EFFACER</button>
+          </form>
+      </fieldset>            
+    </div>
+
+<hr class="border border-dark border-2 opacity-100">
+
+  <div class="m-4">
+  <% data.forEach(user => { %>
+    <div class="text-center text-white fs-5 bg-secondary p-2">
+      <p class="card-text">Id:<%= user._id %></p>
+      <p class="card-text">Nom:<%= user.name %></p>
+      <p class="card-text">Prenom:<%= user.firstname %></p>
+      <p class="card-text">email:<%= user.email %></p>
+      <p>Role: <%=user.role%></p>
+    </div>
+
+<hr class="border border-primary border-1 opacity-50">
+
+  <h5>Modifier l'utilisateur</h5>
+  <form action="/users/<%= user.email %>?_method=PATCH" method="POST">
+    <label for="name" class="form-label">Entrez le nom de l'utilisateur</label><br>
+      <input type="text" id="name" name="name" placeholder="<%= user.name %>"><br>
+    <label for="firstName">Entrez le prénom de l'utilisateur</label><br>
+      <input type="text" id="firstname" name="firstname" placeholder="<%= user.firstname %>"><br>
+    <label for="email">Entrez l'email de l'utilisateur</label><br>
+      <input type="email" id="email" name="email" placeholder="<%= user.email %>"><br>
+    <label for="password">Entrez le nouveau mot de passe</label><br>
+      <input type="text" name="password"><br><br>
+      <button type="submit">MODIFIER</button>
+      <button type="reset">EFFACER</button>
+  </form>
+
+<hr class="border border-primary border-1 opacity-50">
+
+  <h5>Supprimer l'utilisateur</h5>
+  <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+    <button type="submit">SUPPRIMER</button>
+  </form>
+
+  <a href="/users">Retour à la page des utilisateurs</a><br>
+  <a href="/home">Retour à la page d'accueil</a><br>
+
+
+<hr class="border border-dark border-2 opacity-100">
+<hr class="border border-dark border-2 opacity-100">
+
+
+  <% }) %>
+
+</div>
 <%- include('partials/footer') %>
 

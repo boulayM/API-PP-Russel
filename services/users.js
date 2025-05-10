@@ -1,5 +1,58 @@
 
 const User = require ('../models/user');
+const bcrypt = require ('bcrypt');
+const jwt = require ('jsonwebtoken');
+const SECRET_KEY = process.env.SECRET_KEY;
+
+
+// ICI LA METHODE D'AUTENTIFICATION 
+
+exports.authenticate = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+         let user = await User.findOne ({ email: email }, '-__v -createdAt -updatedAt');
+
+         if (user) {
+
+            bcrypt.compare(password, user.password, function(err, response) {
+
+                if (err) {
+                throw new Error(err);
+            }
+            
+            if (response) {
+
+                delete user._doc.password;
+
+                const expireIn = 24 * 60 * 60;
+                const token = jwt.sign ({
+                    user: user
+                },
+                SECRET_KEY,
+                {
+                    expiresIn: expireIn
+                
+                });
+
+                res.header ('Authorization', 'Bearer' + token);
+
+                return res.status(200).json('authenticate_succeed');
+            }
+
+            return res.status(403).json ('wrong_credentials');
+            });
+
+         } else {
+
+            return res.status(404).json('user_not_found');
+         }
+         
+    } catch (error) {
+        return res.status(501).json(error);
+    }
+}
+
 
 //ON EXPORTE LE CALLBACK AFIN D' ACCEDER A LA PAGE UTILISATEURS
 
@@ -8,6 +61,7 @@ exports.usersPage = (req, res) => {
     return res.render('users')
 };
 
+//ON EXPORTE LE CALLBACK AFIN DRECCUPERER TOUS LES UTILISATEURS
 
 exports.getAll = async (req, res, next) => {
 
@@ -33,13 +87,13 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
 
-    const id = req.params.id
+    const id = req.body.email
 
     try {
-        let user = await User.findById(id);
+        let user = await User.findOne({email: id});
 
         if (user) {
-            return res.status(200).json(user);
+            return res.render ('oneUser', {user});
         }
 
         return res.status(404).json('user_not_found');
@@ -65,7 +119,7 @@ exports.getById = async (req, res, next) => {
 
     try {
         let user = await User.create(temp);
-        return res.status(201).json(user);
+        return res.render('usersAdd', {user} );
     }
     catch (error) {
 
@@ -78,17 +132,19 @@ exports.getById = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
 
-    const id = req.params.id
+    const id = req.body.email;
 
     const temp = ({
-
+        
         name: req.body.name,
         firstname: req.body.firstname,
-        email: req.body.email
+        email: req.body.email,
+        password: req.body.password
+
     });
 
     try {
-        let user = await User.findOne({_id : id});
+        let user = await User.findOne({email : id});
         if (user) {
             Object.keys(temp).forEach((key) => {
                 if (!!temp[key]) {
@@ -104,7 +160,7 @@ exports.update = async (req, res, next) => {
     catch {
         return res.status(501).json(error);
     }
-}
+};
 
 // ICI LE CALLBACK POUR SUPPRIMER UN USER
 
@@ -115,7 +171,7 @@ exports.delete = async (req, res, next) => {
     try {
         await User.deleteOne ({_id: id});
 
-        return res.status(204).json("delete_ok");
+        return res.render('usersDelete');
     }
     catch (error) {
         return res.status(501).json(error);

@@ -1,0 +1,13 @@
+<%- include('partials/header', { title: 'Catways' }) %>
+
+<div class="card ms-4 mt-4" style="width: 24rem;">
+    <div class="card-body">
+      <h5>Catway créee avec succés!</h5>
+      <h6 class="card-title">Id: <%= catway._id %></h6>
+      <p class="card-text">Numéro: <%= catway.catwayNumber %></p>
+      <p class="card-text">Type: <%= catway.catwayType %></p>
+      <p class="card-text">Estat: <%= catway.catwayState %></p>
+      <a href="/catwaysPage">Retour à la page des Catways</a><br>
+      <a href="/home">Retour à la page d'accueil</a>
+    </div>
+</div>

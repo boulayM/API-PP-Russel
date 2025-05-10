@@ -1,12 +1,56 @@
 <%- include('partials/header', { title: 'Catways' }) %>
 
-<div class="card" style="width: 18rem;">
+<div class="card ms-4 mt-4 text-center" style="width: 24rem;">
     <div class="card-body">
-      <h6 class="card-title">Catway Id: <%= oneCatway._id %></h6>
-      <p class="card-text">Catway number: <%= oneCatway.catwayNumber %></p>
-      <p class="card-text">Catway type: <%= oneCatway.catwayType %></p>
-      <p class="card-text">Catway State: <%= oneCatway.catwayState %></p>
-      <a href="/home" class="card-link">RETOUR</a>
-      <a href="#" class="card-link">Another link</a>
+      <h6 class="card-title">Id: <%= oneCatway._id %></h6>
+      <p class="card-text">Numéro du Catway: <%= oneCatway.catwayNumber %></p>
+      <p class="card-text">Type de Catway: <%= oneCatway.catwayType %></p>
+      <p class="card-text">Etat du Catway: <%= oneCatway.catwayState %></p>
     </div>
+<div class="accordion">
+    <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+              Modifier l'état du Catway
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="mb-3">
+                    <fieldset class="ml-3 mt-3">
+                      <legend><h5>Modifier l'état du Catway</h5></legend><br>
+                        <form action="/catways/<%= oneCatway._id%>?_method=PATCH" method="POST">
+                            <textarea name="catwayState" id="catwayState" placeholder="Décrivez le nouvel état du Catway"></textarea><br>
+                          <button type="submit">MODIFIER</button>
+                        </form><br>
+                    </fieldset>            
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+              Supprimer le Catway
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="mb-3">
+                    <fieldset class="ml-3 mt-3">
+                      <form action="/catways/<%= oneCatway._id%>?_method=DELETE" method="POST">
+                        <label for="delete"><h5>Supprimer le Catway</h5></label><br>
+                          <button type="submit" id="delete">SUPPRIMER</button>
+                      </form>
+                    </fieldset>            
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="/home" class="card-link">Retour à la page d'accueil</a><br>
+      <a href="/catwaysPage" class="card-link">Retour à la page des Catways</a>
   </div>
+</div>
+
+  <%- include('partials/footer') %>
