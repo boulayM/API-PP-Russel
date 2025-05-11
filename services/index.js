@@ -3,7 +3,6 @@ const jwt = require ('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 const User = require ('../models/user');
 
-
 // ICI LA METHODE D'AUTENTIFICATION 
 
 exports.authenticate = async (req, res, next) => {
@@ -62,9 +61,10 @@ exports.loggin = async (req, res, next) => {
         
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-    
+
+        req.session.user={email}
         const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-        res.render('home', {data: user.email});
+        res.render('home', {user});
       } catch (err) {
         res.status(500).json({ message: 'Error logging in', error: err.message });
       }

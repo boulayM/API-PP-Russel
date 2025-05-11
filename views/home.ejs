@@ -5,5 +5,17 @@
     <h1>Bienvenue dans l'API du Port de Plaisance Russel</h1>
 </div>
 <%- include('partials/navbar') %> 
+<p class="text-end me-4">Utilisateur: <%= user.email %></p>
+<p class="text-end me-4" id="date-time"></p>
 <%- include('partials/footer') %>
 
+<script>
+    function displayDateTime() {
+      const now = new Date();
+      const formattedDateTime = now.toLocaleString(); // Formats date and time based on user's locale
+      document.getElementById('date-time').textContent = formattedDateTime;
+    }
+
+    displayDateTime(); // Initial call to display date and time
+    setInterval(displayDateTime, 1000); // Update every second
+  </script>

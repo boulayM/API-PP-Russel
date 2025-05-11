@@ -2,6 +2,7 @@
 const User = require ('../models/user');
 const bcrypt = require ('bcrypt');
 const jwt = require ('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 
@@ -103,6 +104,7 @@ exports.getById = async (req, res, next) => {
     }
 };
 
+
 //LE CALLBACK QUI SERVIRA A AJOUTER UN USER
 
 
@@ -115,13 +117,15 @@ exports.getById = async (req, res, next) => {
         firstname: req.body.firstname,
         email: req.body.email,
         password: req.body.password
+
     });
 
     try {
+
         let user = await User.create(temp);
         return res.render('usersAdd', {user} );
-    }
-    catch (error) {
+
+    } catch (error) {
 
         return res.status(501).json(error);
     }
@@ -132,7 +136,7 @@ exports.getById = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
 
-    const id = req.body.email;
+    const id = req.params.id;
 
     const temp = ({
         
@@ -144,7 +148,7 @@ exports.update = async (req, res, next) => {
     });
 
     try {
-        let user = await User.findOne({email : id});
+        let user = await User.findById({_id : id});
         if (user) {
             Object.keys(temp).forEach((key) => {
                 if (!!temp[key]) {
@@ -152,7 +156,7 @@ exports.update = async (req, res, next) => {
                 }
             });
             await user.save();
-            return res.status(201).json(user);
+            return res.render('usersUpdate', {user});
 
         }
         return res.status(404).json("user_not_found");

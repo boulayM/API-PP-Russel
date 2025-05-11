@@ -1,0 +1,14 @@
+<%- include('partials/header', { title: 'Users' }) %>
+
+<div class="card ms-4 mt-4" style="width: 24rem;">
+    <div class="card-body">
+      <h5>Utilisateur modifié avec succés!</h5>
+      <h6>Id: <%= user._id %></h6>
+      <p>Role: <%= user.role %></p>
+      <p>Nom: <%= user.name %></p>
+      <p>Prénom: <%= user.firstname %></p>
+      <p>Email: <%= user.email %></p>
+      <a href="/users">Retour à la page des Utilisateurs</a><br>
+      <a href="/home">Retour à la page d'accueil</a>
+    </div>
+</div>
