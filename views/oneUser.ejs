@@ -17,7 +17,7 @@
             <div class="accordion-body">
                 <div class="mb-3">
                     <fieldset class="ml-3 mt-3">
-                        <form action="/users/<%= user.email %>?_method=PATCH" method="POST">
+                        <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                             <label for="name" class="form-label">Nom de l'utilisateur</label>
                             <input type="text" id="name" name="name" class="form-control" placeholder="<%= user.name %>"><br>
                             <label for="firstName">Prénom de l'utilisateur</label>

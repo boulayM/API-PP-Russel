@@ -5,6 +5,8 @@ var logger = require('morgan');
 const cors = require ('cors');
 const bodyParser = require ('body-parser');
 const methodOverride = require ('method-override');
+const session = require ('express-session');
+const SECRET_KEY = process.env.SECRET_KEY;
 
 
 var indexRouter = require('./routes/index');
@@ -31,6 +33,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(session({
+  secret: SECRET_KEY,
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.use('/', indexRouter);
 

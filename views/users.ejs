@@ -6,6 +6,7 @@
 
 <%- include('partials/usersNavbar') %> 
 
+
     <div class="m-4">
       <fieldset class="ml-3 mt-3">
         <legend>Formulaire pour AJOUTER un utilisateur</legend>
@@ -42,13 +43,13 @@
       <p class="card-text">Nom:<%= user.name %></p>
       <p class="card-text">Prenom:<%= user.firstname %></p>
       <p class="card-text">email:<%= user.email %></p>
-      <p>Role: <%=user.role%></p>
+      <p class="card-text">Role: <%=user.role%></p>
     </div>
 
 <hr class="border border-primary border-1 opacity-50">
 
   <h5>Modifier l'utilisateur</h5>
-  <form action="/users/<%= user.email %>?_method=PATCH" method="POST">
+  <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
     <label for="name" class="form-label">Entrez le nom de l'utilisateur</label><br>
       <input type="text" id="name" name="name" placeholder="<%= user.name %>"><br>
     <label for="firstName">Entrez le prénom de l'utilisateur</label><br>
