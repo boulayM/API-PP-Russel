@@ -7,6 +7,7 @@ const bodyParser = require ('body-parser');
 const methodOverride = require ('method-override');
 const session = require ('express-session');
 const SECRET_KEY = process.env.SECRET_KEY;
+const jsdocPath = path.join(__dirname, 'out');
 
 
 var indexRouter = require('./routes/index');
@@ -40,6 +41,7 @@ app.use(session({
 }));
 
 app.use('/', indexRouter);
+app.use('/out', express.static(jsdocPath));
 
 app.use(function(req, res, next) {
   res.status (404).json({name: 'API', version: '1.0', status: 404, message: 'not_found'});

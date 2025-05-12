@@ -2,12 +2,16 @@
 const User = require ('../models/user');
 const bcrypt = require ('bcrypt');
 const jwt = require ('jsonwebtoken');
-const { body, validationResult } = require('express-validator');
 const SECRET_KEY = process.env.SECRET_KEY;
 
-
-// ICI LA METHODE D'AUTENTIFICATION 
-
+/**
+ * Middleware to authenticate users
+ * 
+ * @param {params} request to the server
+ * @param {params} response from the server
+ * @param {params} next module to be run
+ * @returns 
+ */
 exports.authenticate = async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -55,14 +59,28 @@ exports.authenticate = async (req, res, next) => {
 }
 
 
-//ON EXPORTE LE CALLBACK AFIN D' ACCEDER A LA PAGE UTILISATEURS
+
+/**
+ * Méthode pour accéder à la page users
+ * 
+ * @param {params} req 
+ * @param {params} res Renderise la page users.ejs en réponse
+ * @returns 
+ */
 
 exports.usersPage = (req, res) => {
     
     return res.render('users')
 };
 
-//ON EXPORTE LE CALLBACK AFIN DRECCUPERER TOUS LES UTILISATEURS
+/**
+ * Méthode pour réccupérer la liste de tous les utilisateurs
+ * 
+ * @param {params} req Le schéma modèle recherche les utilisateurs
+ * @param {params} res Retourne la page des utilisateurs.ejs avec les données de tous les utilisateurs
+ * @param {params} next 
+ * @returns 
+ */
 
 exports.getAll = async (req, res, next) => {
 
@@ -83,8 +101,13 @@ exports.getAll = async (req, res, next) => {
 };
 
 
-//LE CALLBACK QUI SERVIRA A RECCUPERER UN USER
-
+/**
+ * 
+ * @param {params} req Le modèle recherche un utilisateur à paratir de la donnée email
+ * @param {params} res Retourne la page oneUser.ejs avec les données de cet utilisateur
+ * @param {*} next 
+ * @returns 
+ */
 
 exports.getById = async (req, res, next) => {
 
@@ -105,7 +128,14 @@ exports.getById = async (req, res, next) => {
 };
 
 
-//LE CALLBACK QUI SERVIRA A AJOUTER UN USER
+/**
+ * 
+ * @param {params} req Le modèle demande à la base de données de créer un utilisateur
+ * en suivant les données déterminées dans la variable "temp"
+ * @param {params} res Retourne la page userAdd.ejs avec les donnés du nouvel utilisateur
+ * @param {*} next 
+ * @returns 
+ */
 
 
  exports.add = async (req, res, next) => {
@@ -132,7 +162,13 @@ exports.getById = async (req, res, next) => {
 };
 
 
-//LE CALLBACK QUI SERVIRA A MODIFIER UN USER
+/**
+ * 
+ * @param {params} req Requete pour modification d'u utilisateur
+ * @param {params} res Retourne la page usersUpdate.ejs avec les données mises à jour
+ * @param {*} next 
+ * @returns 
+ */
 
 exports.update = async (req, res, next) => {
 
@@ -166,7 +202,13 @@ exports.update = async (req, res, next) => {
     }
 };
 
-// ICI LE CALLBACK POUR SUPPRIMER UN USER
+/**
+ * 
+ * @param {params} req Requete pour supprimer un utilisateur
+ * @param {params} res Retourne la page usersDelete.ejs avec un message
+ * @param {*} next 
+ * @returns 
+ */
 
 exports.delete = async (req, res, next) => {
 
