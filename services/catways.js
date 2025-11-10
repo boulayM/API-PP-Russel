@@ -1,4 +1,3 @@
-const { render } = require('jade');
 const Catway = require ('../models/catway');
 const Reservation = require('../models/reservation');
 const service = require ('../services/home');

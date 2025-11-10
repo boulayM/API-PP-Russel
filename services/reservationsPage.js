@@ -6,5 +6,5 @@
  */
 
 exports.get = async (req, res) => {
-    res.render('reservationsPage');
+    res.render('reservationsPage', { user: req.session.user });
 }
