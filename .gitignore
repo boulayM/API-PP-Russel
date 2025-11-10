@@ -1,4 +1,6 @@
 .vercel
-env
+.env
+.env.dev
+.env.prod
 
 node-modules/bcrypt
