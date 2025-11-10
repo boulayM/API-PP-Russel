@@ -62,12 +62,15 @@
       <button type="reset">EFFACER</button>
   </form>
 
+
 <hr class="border border-primary border-1 opacity-50">
 
   <h5>Supprimer l'utilisateur</h5>
   <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
     <button type="submit">SUPPRIMER</button>
   </form>
+
+
 
   <a href="/users">Retour à la page des utilisateurs</a><br>
   <a href="/home">Retour à la page d'accueil</a><br>

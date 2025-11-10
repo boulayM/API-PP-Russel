@@ -215,6 +215,7 @@ exports.delete = async (req, res, next) => {
     const id = req.params.id
 
     try {
+
         await User.deleteOne ({_id: id});
 
         return res.render('usersDelete');

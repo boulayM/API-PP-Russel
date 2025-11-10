@@ -1,7 +1,7 @@
-const {check, validationResult} = require('express-validator');
+const {query, validationResult} = require('express-validator');
 
 exports.validateUser = [
-  check('name')
+  query('name')
     .trim()
     .escape()
     .not()
@@ -11,7 +11,7 @@ exports.validateUser = [
     .isLength({min: 3})
     .withMessage('Minimum 3 characters required!')
     .bail(),
-  check('lastname')
+  query('lastname')
     .trim()
     .escape()
     .not()
@@ -22,7 +22,7 @@ exports.validateUser = [
     .withMessage('Minimum 3 characters required!')
     .bail(),
 
-  check('email')
+  query('email')
     .trim()
     .not()
     .isEmpty()
@@ -32,7 +32,7 @@ exports.validateUser = [
     .withMessage("Invalid email address!")
     .bail(),
 
-  check('password')
+  query('password')
     .trim()
     .not()
     .isEmpty()

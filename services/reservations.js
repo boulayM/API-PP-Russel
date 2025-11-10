@@ -91,7 +91,7 @@ exports.update = async (req, res, next) => {
         let reservation = await Reservation.findOne({ catwayNumber: id});
         if (reservation) {
             Object.keys(temp).forEach((key) => {
-                if (!!temp[key]) {
+                if (reservation.hasOwnProperty(key)) {
                     reservation[key] = temp[key];
                 }
             });

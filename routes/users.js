@@ -5,6 +5,7 @@ var router = express.Router();
 const service = require ('../services/users');
 const private = require ('../middlewares/private');
 const validate = require ('../middlewares/usersValidation');
+const confirm = require ('../middlewares/confirmDeleteUser');
 
 
 router.get ('/', service.getAll, private.checkJWT);
@@ -15,7 +16,7 @@ router.put ('/add', service.add, private.checkJWT, validate.validateUser);
 //La route pour modifier un utilistaeur
 router.patch ('/:id', service.update, private.checkJWT);
 //La route pour supprimer un utilistaeur
-router.delete ('/:id', service.delete, private.checkJWT);
+router.delete ('/:id', service.delete, private.checkJWT, confirm.confirmDelete);
 
 router.post('/authenticate', service.authenticate);
 
