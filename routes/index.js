@@ -12,7 +12,7 @@ const homeRoute = require ('../routes/home');
 const service = require ('../services/index');
 const private = require ('../middlewares/private');
 
-router.post('/', service.loggin, private.checkJWT);
+router.post('/', service.login, private.checkJWT);
 
 /* GET home page. */
 
