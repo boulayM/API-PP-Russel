@@ -8,7 +8,6 @@ const methodOverride = require ('method-override');
 const session = require ('express-session');
 const SECRET_KEY = process.env.SECRET_KEY;
 const jsdocPath = path.join(__dirname, 'out');
-require('dotenv').config();
 
 
 var indexRouter = require('./routes/index');
