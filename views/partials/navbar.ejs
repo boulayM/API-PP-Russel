@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" href="/">PP RUSSEL</a>
+  <a class="navbar-brand ps-3" href="/">PP RUSSEL</a>
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -8,15 +8,19 @@
         <li class="nav-item">
           <a class="nav-link" href="/reservationsPage">Reservations</a>
         </li>
-        <li class="nav-item">
+        <% if (user && user.role === 'admin') { %>
+          <li class="nav-item">
           <a class="nav-link" href="/users">Users</a>
-        </li>
-                <li>
+          </li>
+        <% } %>
+        <!--
+        <li>
           <a class="nav-link" href="/out" target="_blank">Documentation</a>
         </li>
+        -->
         <li>
           <a class="nav-link" href="/">LOGOUT</a>
         </li>
       </ul>
     </div>
-  </nav>
+</nav>

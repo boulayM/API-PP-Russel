@@ -5,7 +5,7 @@ const service = require ('../services/catways');
 const private = require ('../middlewares/private');
 
 
-router.get ('/', service.getAll, private.checkJWT);
+router.get ('/', private.checkJWT, service.getAll);
 //La route pour lire les infos d'un utilistaeur
 router.post ('/:id', service.getById, private.checkJWT);
 //La route pour ajouter un utilistaeur

@@ -12,7 +12,7 @@ router.get ('/', service.getAll, private.checkJWT);
 //La route pour lire les infos d'un utilistaeur
 router.post ('/:id', service.getById, private.checkJWT);
 //La route pour ajouter un utilistaeur
-router.put ('/add', service.add, private.checkJWT, validate.validateUser);
+router.put ('/add', validate.validateUser, service.add, private.checkJWT);
 //La route pour modifier un utilistaeur
 router.patch ('/:id', service.update, private.checkJWT);
 //La route pour supprimer un utilistaeur
