@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "env-cmd -f ./env/.env nodemon ./bin/www",
-    "dev": "env-cmd -f ./env/.env.dev nodemon ./bin/www",
+    "start": "nodemon ./bin/www",
+    "dev": "nodemon ./bin/www",
     "prod": "nodemon ./bin/www"
   },
   "dependencies": {
