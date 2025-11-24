@@ -69,6 +69,7 @@ exports.authenticate = async (req, res, next) => {
  */
 
 exports.usersPage = (req, res) => {
+
     
     return res.render('users')
 };

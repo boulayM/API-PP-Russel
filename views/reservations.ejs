@@ -18,9 +18,12 @@
 <hr class="border border-primary border-1 opacity-50">
 
     <h4>Modifier la réservation</h4>
-    <form action="/reservations/<%= reservation.catwayNumber%>?_method=PATCH" method="POST">
+    <form action="/reservations/<%= reservation._id%>?_method=PATCH" method="POST">
+        <label for="Reservation Id">
+            <input type="text" name="id" value="<%= reservation._id %>">
+        </label><br>
         <label for="catwayNumber">Numéro du Catway</label><br>
-            <input type="number" name="catwayNumber" value="<%= reservation.catwayNumber %>"><br>
+            <input type="number" name="catwayNumber"><br>
         <label for="clientName">Modifier le nom du Client</label><br>
             <input type="text" name="clientName"><br>
         <label for="boatName">Modifier le nom du bateau</label><br>

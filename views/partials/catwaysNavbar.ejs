@@ -2,9 +2,11 @@
     <a class="navbar-brand ps-3" href="/">LISTE DES CATWAYS</a>
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
       <ul class="navbar-nav">
+        <% if (user && user.role === 'admin') { %>
         <li class="nav-item">
           <a class="nav-link" href="/catwaysPage">| Retou à la page des Catways |</a>
         </li>
+        <% } %>
         <li class="nav-item">
           <a class="nav-link" href="/home">| Retour à l'accueil |</a>
         </li>

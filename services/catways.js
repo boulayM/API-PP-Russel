@@ -15,7 +15,7 @@ exports.getAll = async (req, res, next) => {
 
         if (catways) {
 
-            return res.render('catways', {data: catways});
+            return res.render('catways', {data: catways, user: req.session.user});
 
         }
 

@@ -31,7 +31,7 @@
     </form><br>
 
 <hr class="border border-primary border-1 opacity-50">
-
+    <% if (user && user.role === 'admin') { %>
       <legend><h5>Modifier l'état du Catway</h5></legend><br>
       <form action="/catways/<%= catway._id%>?_method=PATCH" method="POST">
           <textarea name="catwayState" id="catwayState" placeholder="Décrivez le nouvel état du Catway"></textarea><br>
@@ -44,7 +44,7 @@
       <label for="delete"><h5>Supprimer le Catway</h5></label><br>
       <button type="submit" id="delete">SUPPRIMER</button>
       </form>
-
+    <% } %>
     <a href="/catwaysPage">Retour à la page des Catways</a><br>
     <a href="/home">Retour à la page d'accueil</a><br>
 
