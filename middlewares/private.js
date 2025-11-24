@@ -12,6 +12,8 @@ exports.checkJWT = async (req, res, next) => {
         jwt.verify (token, SECRET_KEY, (err, decoded) => {
     if (err) {
         return res.status(401).json('token_not_valid');
+    // Token valide
+    // Rafraîchir le token
     } else {
         req.decoded = decoded;
         const expiresIn = 24 * 60 * 60;

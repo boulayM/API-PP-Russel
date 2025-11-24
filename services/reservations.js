@@ -1,3 +1,4 @@
+const reservation = require('../models/reservation');
 const Reservation = require ('../models/reservation');
 
 
@@ -75,6 +76,65 @@ exports.add = async (req, res, next) => {
 
 //LE CALLBACK QUI SERVIRA A MODIFIER UNE RESERVATION
 
+exports.update = async (id, data) => {
+    // Définir la liste des champs autorisés à être modifiés
+    const allowedFields = ['catwayNumber', 'clientName', 'boatName', 'startDate', 'endDate'];
+
+    // Filtrer les champs autorisés et présents dans data
+    const updates = {};
+
+    allowedFields.forEach(field => {
+        if (data.hasOwnProperty(field) && data[field] !== undefined && data[field] !== '') {
+            updates[field] = data[field];
+        }
+    });
+
+    // Vérifier si au moins un champ a été modifié
+    if (Object.keys(updates).length === 0) {
+        throw new Error('Aucun champ modifié.');
+    }
+
+    // Mettre à jour la réservation
+    const updatedReservation = await Reservation.findByIdAndUpdate(id, { $set: updates }, { new: true });
+    if (!updatedReservation) {
+        throw new Error('Réservation non trouvée.');
+    }
+
+    return updatedReservation;
+};
+/*
+exports.update = async (req, res, next) => {
+
+    const id = req.params.id;
+
+    const temp = {
+        catwayNumber: req.body.catwayNumber,
+        clientName: req.body.clientName,
+        boatName: req.body.boatName,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
+    };
+
+    try {
+        let reservation = await Reservation.findById(id);
+        if (reservation) {
+            // Mettre à jour uniquement si la valeur diffère
+            Object.keys(temp).forEach((key) => {
+                if (reservation.hasOwnProperty(key)) {
+                    if (reservation[key] !== temp[key]) {
+                        reservation[key] = temp[key];
+                    }
+                }
+            });
+            await reservation.save();
+            return res.render('reservationsUpdate', { reservation });
+        }
+        return res.status(404).json("reservation_not_found");
+    } catch (error) {
+        return res.status(501).json({ error: error.message || error });
+    }
+};
+
 exports.update = async (req, res, next) => {
 
     const id = req.body.catwayNumber;
@@ -105,6 +165,7 @@ exports.update = async (req, res, next) => {
         return res.status(501).json(error);
     }
 }
+*/
 
 // ICI LE CALLBACK POUR SUPPRIMER UNE RESERVATION
 

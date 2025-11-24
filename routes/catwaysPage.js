@@ -4,6 +4,6 @@ const service = require ('../services/catwaysPage');
 const private = require ('../middlewares/private');
 
 
-router.get('/', service.get, private.checkJWT);
+router.get('/', private.checkJWT, service.get);
 
 module.exports = router;

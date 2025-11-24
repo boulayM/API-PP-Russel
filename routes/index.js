@@ -10,20 +10,14 @@ const reservationsPageRoute = require('../routes/reservationsPage');
 const homeRoute = require ('../routes/home');
 
 const service = require ('../services/index');
-const private = require ('../middlewares/private');
+const serviceLogout = require ('../services/logout');
 
-router.post('/', service.login, private.checkJWT);
+
+router.post('/', service.login);
 
 /* GET home page. */
 
-router.get('/', async (req, res) => {/*
-  res.status (200).json({
-    name: process.env.APP_NAME,
-    version: '1.0',
-    status: 200,
-    message: 'Bienvenue sur l\'API !'
-  });*/
-
+router.get('/', serviceLogout.logout, async (req, res) => {
   res.render('index', {
     title: 'Accueil'
   })
