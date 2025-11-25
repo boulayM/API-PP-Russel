@@ -11,7 +11,7 @@ router.post ('/:id', private.checkJWT, service.getById);
 //La route pour ajouter un utilistaeur
 router.put ('/add', private.checkJWT, service.add);
 //La route pour modifier un utilistaeur
-router.patch ('/:id', async (req, res) => {
+router.patch ('/:id', private.checkJWT,async (req, res) => {
     try {
         const reservationId = req.params.id;
         const data = req.body;
