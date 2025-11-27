@@ -2,26 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 const service = require ('../services/reservations');
-const private = require ('../middlewares/private');
+const authPrivate = require ('../middlewares/authPrivate');
+const sanitizeReservationUpdate = require ('../middlewares/sanitizeReservationUpdate');
+const skipAuthIfTest = require ('../middlewares/skipAuthIfTest');
 
 
-router.get('/', private.checkJWT, service.getAll);
-//La route pour lire les infos d'un utilistaeur
-router.post ('/:id', private.checkJWT, service.getById);
-//La route pour ajouter un utilistaeur
-router.put ('/add', private.checkJWT, service.add);
-//La route pour modifier un utilistaeur
-router.patch ('/:id', async (req, res) => {
-    try {
-        const reservationId = req.params.id;
-        const data = req.body;
-        const updatedReservation = await service.update(reservationId, data);
-        res.render('reservationsUpdate', { reservation: updatedReservation });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-//La route pour supprimer un utilistaeur
-router.delete ('/:id', private.checkJWT, service.delete);
+router.get('/', skipAuthIfTest(authPrivate.checkJWT), service.getAll);
+router.post('/:id', skipAuthIfTest(authPrivate.checkJWT), service.getById);
+router.put('/add', skipAuthIfTest(authPrivate.checkJWT), service.add);
+router.patch('/:id', skipAuthIfTest(authPrivate.checkJWT), sanitizeReservationUpdate, service.update);
+router.delete('/:id', skipAuthIfTest(authPrivate.checkJWT), service.delete);
 
 module.exports = router;

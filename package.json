@@ -5,7 +5,16 @@
   "scripts": {
     "start": "env-cmd -f ./env/.env nodemon ./bin/www",
     "dev": "env-cmd -f ./env/.env.dev nodemon ./bin/www",
-    "prod": "env-cmd -f ./env/.env.prod nodemon ./bin/www"
+    "prod": "env-cmd -f ./env/.env.prod nodemon ./bin/www",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleDirectories": [
+      "node_modules",
+      "."
+    ]
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -21,18 +30,20 @@
     "express-validator": "^7.2.1",
     "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
-    "jade": "^1.11.0",
     "joi": "^17.13.3",
     "jsdoc": "^4.0.4",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.14.0",
-    "morgan": "~1.9.1",
+    "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
-    "swagger-ui-express": "^5.0.1",
-    "vercel": "^41.7.3"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "env-cmd": "^10.1.0"
+    "@types/jest": "^30.0.0",
+    "env-cmd": "^10.1.0",
+    "jest": "^30.2.0",
+    "mongodb-memory-server": "^10.3.0",
+    "supertest": "^7.1.4"
   }
 }
