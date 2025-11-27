@@ -1,32 +1,33 @@
-const reservation = require('../models/reservation');
 const Reservation = require ('../models/reservation');
-
 
 
 //ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER TOUTES LES RESERVATIONS
 
 
 exports.getAll = async (req, res, next) => {
-
     try {
         let reservations = await Reservation.find();
-        reservations.sort((a, b)=> {
-            return a.catwayNumber - b.catwayNumber
-        });
+        reservations.sort((a, b) => a.catwayNumber - b.catwayNumber);
 
+        reservations = reservations.map(reservation => ({
+            ...reservation._doc,
+            startDate: new Date(reservation.startDate).toLocaleDateString('fr-FR'),
+            endDate: new Date(reservation.endDate).toLocaleDateString('fr-FR')
+        }));
 
-        if (reservations) {
-
-            return res.render('reservations', {data: reservations});
+        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        if (process.env.NODE_ENV === "test") {
+            return res.status(200).json({ data: reservations });
         }
 
-        return res.status(404).json('catways_not_found');
+        // Sinon, rendu normal avec les vues
+        return res.render("reservations", { data: reservations });
 
-    }catch (error) {
-
+    } catch (error) {
         return res.status(501).json('error');
     }
 };
+
 
 //ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER UNE RESERVATION AVEC SON ID
 
@@ -40,7 +41,12 @@ exports.getById = async (req, res, next) => {
 
 
         if (reservation) {
-            return res.render('oneReservation', {reservation});
+        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        if (process.env.NODE_ENV === "test") {
+            return res.status(200).json({ reservation });
+        }
+
+            return res.render('oneReservation', { reservation });
         }
 
         return res.status(404).json('reservation_not_found');
@@ -66,7 +72,12 @@ exports.add = async (req, res, next) => {
 
     try {
         let reservation = await Reservation.create(temp);
-        return res.render('reservationAdd', {reservation});
+        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        if (process.env.NODE_ENV === "test") {
+            return res.status(200).json({ reservation });
+        }
+
+        return res.render('reservationAdd', { reservation });
     }
     catch (error) {
 
@@ -75,97 +86,28 @@ exports.add = async (req, res, next) => {
 };
 
 //LE CALLBACK QUI SERVIRA A MODIFIER UNE RESERVATION
-
-exports.update = async (id, data) => {
-    // Définir la liste des champs autorisés à être modifiés
-    const allowedFields = ['catwayNumber', 'clientName', 'boatName', 'startDate', 'endDate'];
-
-    // Filtrer les champs autorisés et présents dans data
-    const updates = {};
-
-    allowedFields.forEach(field => {
-        if (data.hasOwnProperty(field) && data[field] !== undefined && data[field] !== '') {
-            updates[field] = data[field];
-        }
-    });
-
-    // Vérifier si au moins un champ a été modifié
-    if (Object.keys(updates).length === 0) {
-        throw new Error('Aucun champ modifié.');
-    }
-
-    // Mettre à jour la réservation
-    const updatedReservation = await Reservation.findByIdAndUpdate(id, { $set: updates }, { new: true });
-    if (!updatedReservation) {
-        throw new Error('Réservation non trouvée.');
-    }
-
-    return updatedReservation;
-};
-/*
-exports.update = async (req, res, next) => {
-
-    const id = req.params.id;
-
-    const temp = {
-        catwayNumber: req.body.catwayNumber,
-        clientName: req.body.clientName,
-        boatName: req.body.boatName,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate
-    };
-
+exports.update = async (req, res) => {
     try {
-        let reservation = await Reservation.findById(id);
-        if (reservation) {
-            // Mettre à jour uniquement si la valeur diffère
-            Object.keys(temp).forEach((key) => {
-                if (reservation.hasOwnProperty(key)) {
-                    if (reservation[key] !== temp[key]) {
-                        reservation[key] = temp[key];
-                    }
-                }
-            });
-            await reservation.save();
-            return res.render('reservationsUpdate', { reservation });
+        const reservation = await Reservation.findByIdAndUpdate(
+            req.params.id,
+            { $set: req.updates },
+            { new: true }
+        );
+
+        if (!reservation) {
+            return res.status(404).json({ error: "Réservation non trouvée" });
         }
-        return res.status(404).json("reservation_not_found");
-    } catch (error) {
-        return res.status(501).json({ error: error.message || error });
+        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        if (process.env.NODE_ENV === "test") {
+            return res.status(200).json({ reservation });
+        }
+
+        return res.render('reservationsUpdate', { reservation });
+
+    } catch (err) {
+        res.status(500).json({ error: "Erreur serveur" });
     }
 };
-
-exports.update = async (req, res, next) => {
-
-    const id = req.body.catwayNumber;
-
-    const temp = ({
-        catwayNumber: req.body.catwayNumber,
-        clientName: req.body.clientName,
-        boatName: req.body.boatName,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate
-    });
-
-    try {
-        let reservation = await Reservation.findOne({ catwayNumber: id});
-        if (reservation) {
-            Object.keys(temp).forEach((key) => {
-                if (reservation.hasOwnProperty(key)) {
-                    reservation[key] = temp[key];
-                }
-            });
-            await reservation.save();
-            return res.render('reservationsUpdate', {reservation});
-
-        }
-        return res.status(404).json("reservation_not_found");
-    }
-    catch {
-        return res.status(501).json(error);
-    }
-}
-*/
 
 // ICI LE CALLBACK POUR SUPPRIMER UNE RESERVATION
 
@@ -174,6 +116,10 @@ exports.delete = async (req, res, next) => {
 
     try {
         await Reservation.deleteOne ({_id: id});
+        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        if (process.env.NODE_ENV === "test") {
+            return res.status(200).json({ deleted: true });
+        }
 
         return res.render('reservationDelete');
     }

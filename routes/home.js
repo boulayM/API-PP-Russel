@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const service = require ('../services/home');
-const private = require ('../middlewares/private');
+const authPrivate = require ('../middlewares/authPrivate');
+const skipAuthIfTest = require ('../middlewares/skipAuthIfTest');
 
 
-router.get('/', private.checkJWT, service.get);
+router.get('/', skipAuthIfTest(authPrivate.checkJWT), service.get);
 
 module.exports = router;
