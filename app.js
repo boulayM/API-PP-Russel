@@ -22,6 +22,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
 app.use(cors({
   exposedHeaders: ['Authorization'],
   origin: '*'
@@ -39,6 +40,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+const { swaggerSpec, swaggerUi } = require("./swagger");
+const allowSwagger = require("./middlewares/allowSwagger");
+
+app.use("/docs", allowSwagger, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/', indexRouter);
 app.use('/out', express.static(jsdocPath));

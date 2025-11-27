@@ -1,10 +1,15 @@
 {
   "source": {
-    "include": ["./src"],
+    "include": ["routes", "services", "middlewares", "models"],
     "includePattern": ".js$"
   },
   "opts": {
     "destination": "./out",
-    "recurse": true
-  }
+    "encoding": "utf8",
+    "recurse": true,
+    "template": "default"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
 }

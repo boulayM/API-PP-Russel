@@ -5,6 +5,8 @@
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "doc": "jsdoc -c jsdoc.json",
     "start": "nodemon ./bin/www",
     "dev": "nodemon ./bin/www",
     "prod": "nodemon ./bin/www"
@@ -37,6 +39,7 @@
     "mongoose": "^8.14.0",
     "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

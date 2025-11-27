@@ -1,9 +1,19 @@
-const Reservation = require ('../models/reservation');
+const Reservation = require('../models/reservation');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Reservations
+ *   description: Gestion des réservations
+ */
 
-//ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER TOUTES LES RESERVATIONS
-
-
+/**
+ * GET /reservations
+ * @summary Récupère toutes les réservations
+ * @tags Reservations
+ * @return {object} 200 - Liste des réservations
+ * @return {object} 501 - Erreur serveur
+ */
 exports.getAll = async (req, res, next) => {
     try {
         let reservations = await Reservation.find();
@@ -15,12 +25,10 @@ exports.getAll = async (req, res, next) => {
             endDate: new Date(reservation.endDate).toLocaleDateString('fr-FR')
         }));
 
-        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
         if (process.env.NODE_ENV === "test") {
             return res.status(200).json({ data: reservations });
         }
 
-        // Sinon, rendu normal avec les vues
         return res.render("reservations", { data: reservations });
 
     } catch (error) {
@@ -28,24 +36,26 @@ exports.getAll = async (req, res, next) => {
     }
 };
 
-
-//ICI C'EST LE CALLBACK QUI SERVIRA A RECCUPERER UNE RESERVATION AVEC SON ID
-
+/**
+ * POST /reservations/:catwayNumber
+ * @summary Récupère une réservation par numéro de catway
+ * @tags Reservations
+ * @param {number} req.body.catwayNumber - Numéro du catway recherché
+ * @return {object} 200 - Réservation trouvée
+ * @return {object} 404 - Réservation introuvable
+ * @return {object} 501 - Erreur serveur
+ */
 exports.getById = async (req, res, next) => {
 
-    const id = req.body.catwayNumber
+    const id = req.body.catwayNumber;
 
     try {
-
         let reservation = await Reservation.findOne({ catwayNumber: id });
 
-
         if (reservation) {
-        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
-        if (process.env.NODE_ENV === "test") {
-            return res.status(200).json({ reservation });
-        }
-
+            if (process.env.NODE_ENV === "test") {
+                return res.status(200).json({ reservation });
+            }
             return res.render('oneReservation', { reservation });
         }
 
@@ -56,23 +66,27 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-//LE CALLBACK QUI SERVIRA A AJOUTER UNE RESERVATION
-
+/**
+ * PUT /reservations/add
+ * @summary Ajoute une réservation
+ * @tags Reservations
+ * @param {object} req.body - Données de la réservation
+ * @return {object} 200 - Réservation créée
+ * @return {object} 501 - Erreur serveur
+ */
 exports.add = async (req, res, next) => {
 
     const temp = ({
-
         catwayNumber: req.body.catwayNumber,
         clientName: req.body.clientName,
         boatName: req.body.boatName,
         startDate: req.body.startDate,
         endDate: req.body.endDate
-        
     });
 
     try {
         let reservation = await Reservation.create(temp);
-        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+
         if (process.env.NODE_ENV === "test") {
             return res.status(200).json({ reservation });
         }
@@ -80,12 +94,19 @@ exports.add = async (req, res, next) => {
         return res.render('reservationAdd', { reservation });
     }
     catch (error) {
-
         return res.status(501).json(error);
     }
 };
 
-//LE CALLBACK QUI SERVIRA A MODIFIER UNE RESERVATION
+/**
+ * PATCH /reservations/:id
+ * @summary Met à jour une réservation existante
+ * @tags Reservations
+ * @param {string} req.params.id - ID MongoDB de la réservation
+ * @return {object} 200 - Réservation mise à jour
+ * @return {object} 404 - Réservation non trouvée
+ * @return {object} 500 - Erreur serveur
+ */
 exports.update = async (req, res) => {
     try {
         const reservation = await Reservation.findByIdAndUpdate(
@@ -97,7 +118,7 @@ exports.update = async (req, res) => {
         if (!reservation) {
             return res.status(404).json({ error: "Réservation non trouvée" });
         }
-        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+
         if (process.env.NODE_ENV === "test") {
             return res.status(200).json({ reservation });
         }
@@ -109,14 +130,20 @@ exports.update = async (req, res) => {
     }
 };
 
-// ICI LE CALLBACK POUR SUPPRIMER UNE RESERVATION
-
+/**
+ * DELETE /reservations/:id
+ * @summary Supprime une réservation
+ * @tags Reservations
+ * @param {string} req.params.id - ID MongoDB
+ * @return {object} 200 - Suppression confirmée
+ * @return {object} 501 - Erreur serveur
+ */
 exports.delete = async (req, res, next) => {
-    const id = req.params.id
+    const id = req.params.id;
 
     try {
-        await Reservation.deleteOne ({_id: id});
-        // 🎯 En environnement de test → renvoyer JSON au lieu de render()
+        await Reservation.deleteOne({ _id: id });
+
         if (process.env.NODE_ENV === "test") {
             return res.status(200).json({ deleted: true });
         }
@@ -126,4 +153,4 @@ exports.delete = async (req, res, next) => {
     catch (error) {
         return res.status(501).json(error);
     }
-}
+};

@@ -1,10 +1,37 @@
-const Catway = require ('../models/catway');
+/**
+ * @file services/catways.js
+ * @description Service contenant toutes les opérations CRUD liées aux catways.
+ */
 
-// GET ALL
+const Catway = require('../models/catway');
+
+/**
+ * @swagger
+ * tags:
+ *   name: Catways
+ *   description: Gestion des pontons (catways)
+ */
+
+/**
+ * GET ALL CATWAYS
+ * 
+ * @swagger
+ * /catways:
+ *   get:
+ *     summary: Récupère la liste complète des catways
+ *     tags: [Catways]
+ *     responses:
+ *       200:
+ *         description: Liste récupérée avec succès
+ *       404:
+ *         description: Aucun catway trouvé
+ *       501:
+ *         description: Erreur interne
+ */
 exports.getAll = async (req, res, next) => {
     try {
         let catways = await Catway.find();
-        catways.sort((a, b)=> a.catwayNumber - b.catwayNumber);
+        catways.sort((a, b) => a.catwayNumber - b.catwayNumber);
 
         // 🎯 Mode test : renvoie JSON
         if (process.env.NODE_ENV === "test") {
@@ -18,7 +45,29 @@ exports.getAll = async (req, res, next) => {
     }
 };
 
-// GET BY ID
+/**
+ * GET CATWAY BY ID
+ * 
+ * @swagger
+ * /catways/{id}:
+ *   post:
+ *     summary: Récupère un catway via son numéro
+ *     tags: [Catways]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Numéro du catway
+ *     responses:
+ *       200:
+ *         description: Catway trouvé
+ *       404:
+ *         description: Aucun catway ne correspond
+ *       501:
+ *         description: Erreur interne
+ */
 exports.getById = async (req, res, next) => {
     const id = req.body.catwayNumber;
     try {
@@ -39,7 +88,33 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-// ADD
+/**
+ * ADD CATWAY
+ * 
+ * @swagger
+ * /catways/add:
+ *   put:
+ *     summary: Ajoute un nouveau catway
+ *     tags: [Catways]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               catwayNumber:
+ *                 type: integer
+ *               catwayType:
+ *                 type: string
+ *               catwayState:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Catway créé avec succès
+ *       501:
+ *         description: Erreur interne
+ */
 exports.add = async (req, res, next) => {
     const temp = {
         catwayNumber: req.body.catwayNumber,
@@ -61,7 +136,29 @@ exports.add = async (req, res, next) => {
     }
 };
 
-// UPDATE
+/**
+ * UPDATE CATWAY
+ * 
+ * @swagger
+ * /catways/{id}:
+ *   patch:
+ *     summary: Met à jour un catway existant
+ *     tags: [Catways]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Identifiant MongoDB du catway
+ *     responses:
+ *       200:
+ *         description: Catway mis à jour
+ *       404:
+ *         description: Catway non trouvé
+ *       501:
+ *         description: Erreur interne
+ */
 exports.update = async (req, res, next) => {
     const id = req.params.id;
 
@@ -70,7 +167,7 @@ exports.update = async (req, res, next) => {
     };
 
     try {
-        let catway = await Catway.findOne({ _id : id });
+        let catway = await Catway.findOne({ _id: id });
 
         if (!catway) {
             return res.status(404).json("catway_not_found");
@@ -93,7 +190,26 @@ exports.update = async (req, res, next) => {
     }
 };
 
-// DELETE
+/**
+ * DELETE CATWAY
+ * 
+ * @swagger
+ * /catways/{id}:
+ *   delete:
+ *     summary: Supprime un catway
+ *     tags: [Catways]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Catway supprimé
+ *       501:
+ *         description: Erreur interne
+ */
 exports.delete = async (req, res, next) => {
     const id = req.params.id;
 

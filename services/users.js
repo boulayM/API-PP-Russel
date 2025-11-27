@@ -1,227 +1,306 @@
-
-const User = require ('../models/user');
-const bcrypt = require ('bcrypt');
-const jwt = require ('jsonwebtoken');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 /**
- * Middleware to authenticate users
- * 
- * @param {params} request to the server
- * @param {params} response from the server
- * @param {params} next module to be run
- * @returns 
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Gestion des utilisateurs
+ */
+
+/**
+ * @swagger
+ * /users/authenticate:
+ *   post:
+ *     summary: Authentifie un utilisateur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: admin@mail.com
+ *               password:
+ *                 type: string
+ *                 example: Password123!
+ *     responses:
+ *       200:
+ *         description: Authentification réussie
+ *       403:
+ *         description: Identifiants incorrects
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       501:
+ *         description: Erreur serveur
  */
 exports.authenticate = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-         let user = await User.findOne ({ email: email }, '-__v -createdAt -updatedAt');
+        let user = await User.findOne({ email }, '-__v -createdAt -updatedAt');
 
-         if (user) {
+        if (!user) {
+            return res.status(404).json('user_not_found');
+        }
 
-            bcrypt.compare(password, user.password, function(err, response) {
-
-                if (err) {
+        bcrypt.compare(password, user.password, function (err, response) {
+            if (err) {
                 throw new Error(err);
             }
-            
-            if (response) {
 
+            if (response) {
                 delete user._doc.password;
 
                 const expireIn = 24 * 60 * 60;
-                const token = jwt.sign ({
-                    user: user
-                },
-                SECRET_KEY,
-                {
-                    expiresIn: expireIn
-                
-                });
+                const token = jwt.sign(
+                    { user },
+                    SECRET_KEY,
+                    { expiresIn: expireIn }
+                );
 
-                res.header ('Authorization', 'Bearer' + token);
+                res.header('Authorization', 'Bearer ' + token);
 
                 return res.status(200).json('authenticate_succeed');
             }
 
-            return res.status(403).json ('wrong_credentials');
-            });
+            return res.status(403).json('wrong_credentials');
+        });
 
-         } else {
-
-            return res.status(404).json('user_not_found');
-         }
-         
     } catch (error) {
         return res.status(501).json(error);
     }
-}
-
-
-
-/**
- * Méthode pour accéder à la page users
- * 
- * @param {params} req 
- * @param {params} res Renderise la page users.ejs en réponse
- * @returns 
- */
-
-exports.usersPage = (req, res) => {
-
-    
-    return res.render('users')
 };
 
 /**
- * Méthode pour réccupérer la liste de tous les utilisateurs
- * 
- * @param {params} req Le schéma modèle recherche les utilisateurs
- * @param {params} res Retourne la page des utilisateurs.ejs avec les données de tous les utilisateurs
- * @param {params} next 
- * @returns 
+ * @swagger
+ * /users/page:
+ *   get:
+ *     summary: Affiche la page principale des utilisateurs
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Page users rendue
  */
+exports.usersPage = (req, res) => {
+    return res.render('users');
+};
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Récupère tous les utilisateurs
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Liste des utilisateurs
+ *       404:
+ *         description: Aucun utilisateur trouvé
+ *       501:
+ *         description: Erreur serveur
+ */
 exports.getAll = async (req, res, next) => {
-
     try {
         let users = await User.find();
 
-        if (users) {
-
-            return res.render('users', {data: users});
+        if (!users || users.length === 0) {
+            return res.status(404).json('users_not_found');
         }
 
-        return res.status(404).json('users_not_found');
+        return res.render('users', { data: users });
 
-    }catch (error) {
-
+    } catch (error) {
         return res.status(501).json('error');
     }
 };
 
-
 /**
- * 
- * @param {params} req Le modèle recherche un utilisateur à paratir de la donnée email
- * @param {params} res Retourne la page oneUser.ejs avec les données de cet utilisateur
- * @param {*} next 
- * @returns 
+ * @swagger
+ * /users/{email}:
+ *   post:
+ *     summary: Récupère un utilisateur via son email
+ *     tags: [Users]
+ *     parameters:
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: client@mail.com
+ *     responses:
+ *       200:
+ *         description: Utilisateur trouvé
+ *       404:
+ *         description: Utilisateur introuvable
+ *       501:
+ *         description: Erreur serveur
  */
-
 exports.getById = async (req, res, next) => {
 
-    const id = req.body.email
+    const id = req.body.email;
 
     try {
-        let user = await User.findOne({email: id});
+        let user = await User.findOne({ email: id });
 
         if (user) {
-            return res.render ('oneUser', {user});
+            return res.render('oneUser', { user });
         }
 
         return res.status(404).json('user_not_found');
-    }
-    catch (error) {
+
+    } catch (error) {
         return res.status(501).json(error);
     }
 };
 
-
 /**
- * 
- * @param {params} req Le modèle demande à la base de données de créer un utilisateur
- * en suivant les données déterminées dans la variable "temp"
- * @param {params} res Retourne la page userAdd.ejs avec les donnés du nouvel utilisateur
- * @param {*} next 
- * @returns 
+ * @swagger
+ * /users/add:
+ *   put:
+ *     summary: Ajoute un utilisateur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - role
+ *               - name
+ *               - firstname
+ *               - email
+ *               - password
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 example: admin
+ *               name:
+ *                 type: string
+ *                 example: Doe
+ *               firstname:
+ *                 type: string
+ *                 example: John
+ *               email:
+ *                 type: string
+ *                 example: user@mail.com
+ *               password:
+ *                 type: string
+ *                 example: Password123!
+ *     responses:
+ *       200:
+ *         description: Utilisateur créé
+ *       501:
+ *         description: Erreur serveur
  */
+exports.add = async (req, res, next) => {
 
-
- exports.add = async (req, res, next) => {
-
-    const temp = ({
-        
+    const temp = {
         role: req.body.role,
         name: req.body.name,
         firstname: req.body.firstname,
         email: req.body.email,
         password: req.body.password
-
-    });
+    };
 
     try {
-
         let user = await User.create(temp);
-        return res.render('usersAdd', {user} );
+        return res.render('usersAdd', { user });
 
     } catch (error) {
-
         return res.status(501).json(error);
     }
 };
 
-
 /**
- * 
- * @param {params} req Requete pour modification d'u utilisateur
- * @param {params} res Retourne la page usersUpdate.ejs avec les données mises à jour
- * @param {*} next 
- * @returns 
+ * @swagger
+ * /users/{id}:
+ *   patch:
+ *     summary: Met à jour un utilisateur existant
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Utilisateur mis à jour
+ *       404:
+ *         description: Utilisateur introuvable
+ *       501:
+ *         description: Erreur serveur
  */
-
 exports.update = async (req, res, next) => {
 
     const id = req.params.id;
 
-    const temp = ({
-        
+    const temp = {
         name: req.body.name,
         firstname: req.body.firstname,
         email: req.body.email,
         password: req.body.password
-
-    });
+    };
 
     try {
-        let user = await User.findById({_id : id});
-        if (user) {
-            Object.keys(temp).forEach((key) => {
-                if (!!temp[key]) {
-                    user[key] = temp[key];
-                }
-            });
-            await user.save();
-            return res.render('usersUpdate', {user});
+        let user = await User.findById({ _id: id });
 
+        if (!user) {
+            return res.status(404).json("user_not_found");
         }
-        return res.status(404).json("user_not_found");
-    }
-    catch {
+
+        Object.keys(temp).forEach((key) => {
+            if (!!temp[key]) {
+                user[key] = temp[key];
+            }
+        });
+
+        await user.save();
+
+        return res.render('usersUpdate', { user });
+
+    } catch (error) {
         return res.status(501).json(error);
     }
 };
 
 /**
- * 
- * @param {params} req Requete pour supprimer un utilisateur
- * @param {params} res Retourne la page usersDelete.ejs avec un message
- * @param {*} next 
- * @returns 
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Supprime un utilisateur
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Utilisateur supprimé
+ *       501:
+ *         description: Erreur serveur
  */
-
 exports.delete = async (req, res, next) => {
 
-    const id = req.params.id
+    const id = req.params.id;
 
     try {
-
-        await User.deleteOne ({_id: id});
-
+        await User.deleteOne({ _id: id });
         return res.render('usersDelete');
-    }
-    catch (error) {
+
+    } catch (error) {
         return res.status(501).json(error);
     }
-}
+};
