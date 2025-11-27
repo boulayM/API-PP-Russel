@@ -7,7 +7,9 @@
     "dev": "env-cmd -f ./env/.env.dev nodemon ./bin/www",
     "prod": "env-cmd -f ./env/.env.prod nodemon ./bin/www",
     "test": "jest --runInBand --detectOpenHandles",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "jest": {
     "testEnvironment": "node",
@@ -37,6 +39,7 @@
     "mongoose": "^8.14.0",
     "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

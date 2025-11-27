@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: API Port de Plaisance
+  version: 1.0.0
+  description: Documentation de l'API
+
+paths:
+
+  /users:
+    get:
+      summary: Récupère la liste de tous les utilisateurs
+      tags: [Users]
+      responses:
+        200: { description: Liste récupérée }
+        404: { description: Aucun utilisateur trouvé }
+
+  /users/{id}:
+    post:
+      summary: Récupère un utilisateur par email
+      tags: [Users]
+      parameters:
+        - name: email
+          in: body
+          schema: { type: string }
+          required: true
+      responses:
+        200: { description: Utilisateur trouvé }
+        404: { description: Introuvable }
+    patch:
+      summary: Met à jour un utilisateur
+      tags: [Users]
+      responses:
+        200: { description: Mis à jour }
+        404: { description: Introuvable }
+    delete:
+      summary: Supprime un utilisateur
+      tags: [Users]
+      responses:
+        200: { description: Supprimé }
+
+  /users/add:
+    put:
+      summary: Ajoute un utilisateur
+      tags: [Users]
+      responses:
+        200: { description: Créé }
+
+  /users/authenticate:
+    post:
+      summary: Authentifie un utilisateur
+      tags: [Users]
+      responses:
+        200: { description: Authentifié }
+        403: { description: Mauvais identifiants }
+        404: { description: Introuvable }
+
+  /catways:
+    get:
+      summary: Récupère la liste des catways
+      tags: [Catways]
+      responses:
+        200: { description: Liste récupérée }
+        501: { description: Erreur serveur }
+
+  /catways/{id}:
+    post:
+      summary: Récupère un catway
+      tags: [Catways]
+      responses:
+        200: { description: Trouvé }
+        404: { description: Non trouvé }
+    patch:
+      summary: Met à jour un catway
+      tags: [Catways]
+      responses:
+        200: { description: Mis à jour }
+        404: { description: Non trouvé }
+    delete:
+      summary: Supprime un catway
+      tags: [Catways]
+      responses:
+        200: { description: Supprimé }
+
+  /catways/add:
+    put:
+      summary: Ajoute un catway
+      tags: [Catways]
+      responses:
+        200: { description: Créé }
+
+  /reservations:
+    get:
+      summary: Récupère toutes les réservations
+      tags: [Reservations]
+      responses:
+        200: { description: Liste récupérée }
+
+  /reservations/{id}:
+    post:
+      summary: Récupère une réservation
+      tags: [Reservations]
+      responses:
+        200: { description: Trouvée }
+        404: { description: Non trouvée }
+    patch:
+      summary: Met à jour une réservation
+      tags: [Reservations]
+      responses:
+        200: { description: Mise à jour }
+        404: { description: Non trouvée }
+    delete:
+      summary: Supprime une réservation
+      tags: [Reservations]
+      responses:
+        200: { description: Supprimée }
+
+  /reservations/add:
+    put:
+      summary: Ajoute une réservation
+      tags: [Reservations]
+      responses:
+        200: { description: Créée }

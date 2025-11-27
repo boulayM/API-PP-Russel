@@ -1,6 +1,58 @@
-// middlewares/validate.js
-// Middleware pour valider les données utilisateur avant de les enregistrer dans la base de données
+/**
+ * @module Middleware/UsersValidation
+ * @description Valide les données envoyées lors de la création/modification d’un utilisateur.
+ */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserValidationError:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: "Veuillez remplir tous les champs."
+ *
+ *   parameters:
+ *     EmailParam:
+ *       in: query
+ *       name: email
+ *       required: true
+ *       schema:
+ *         type: string
+ *         format: email
+ *       description: Adresse email de l’utilisateur
+ *
+ *   requestBodies:
+ *     UserValidationBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "test@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "Password123!"
+ *             required:
+ *               - email
+ *               - password
+ */
+
+/**
+ * Middleware de validation basique des utilisateurs.
+ *
+ * - En mode **test**, seules les valeurs présentes sont vérifiées.
+ * - En mode **normal**, une validation stricte est appliquée au mot de passe.
+ *
+ * @param {object} req - Requête Express
+ * @param {object} res - Réponse Express
+ * @param {function} next - Fonction next()
+ */
 module.exports = function validate(req, res, next) {
   const { email, password } = req.body;
 
