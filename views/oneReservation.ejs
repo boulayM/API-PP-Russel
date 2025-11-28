@@ -10,7 +10,7 @@
       <p class="card-text">Date d'entrée: <%= reservation.startDate %></p>
       <p class="card-text">Date de sortie: <%= reservation.endDate %></p>
       <h4>Modifier la réservation</h4>
-      <form action="/reservations/<%= reservation.catwayNumber%>?_method=PATCH" method="POST">
+      <form action="/reservations/<%= reservation._id%>?_method=PATCH" method="POST">
         <label for="catwayNumber">Numéro du Catway</label><br>
         <input type="number" name="catwayNumber" value="<%= reservation.catwayNumber %>">
         <label for="clientName">Modifier le nom du client</label><br>
